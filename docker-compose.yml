@@ -1,0 +1,44 @@
+# 設定は以下を参考
+# https://www.digitalocean.com/community/tutorials/how-to-set-up-flask-with-mongodb-and-docker
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+     - "5000:5000"
+    volumes:
+     - .:/code
+    environment:
+      MONGODB_DATABASE: task_manager_db
+      MONGODB_USERNAME: user
+      MONGODB_PASSWORD: Bn9kRGjL
+      MONGODB_HOSTNAME: db
+    depends_on:
+      - db
+    networks:
+      - backend
+  db:
+    image: mongo:4.4.2
+    command: mongod --auth
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: b8R2azvc
+      MONGO_INITDB_DATABASE: task_manager_db
+      MONGODB_DATA_DIR: /data/db
+      MONDODB_LOG_DIR: /dev/null
+    volumes:
+      - ./mongodbdata:/data/db
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+# volumes:
+#   mongodbdata:
+#     driver: local
+#   appdata:
+#     driver: local
+#   nginxdata:
+#     driver: local

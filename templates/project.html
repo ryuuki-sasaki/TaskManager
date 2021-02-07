@@ -1,0 +1,36 @@
+<div id="{{parts}}-project-select" class="project-select my-1 form-group row" >
+  <label class="col-form-label col-2">Project:</label>
+  <select class="selectpicker col-8" data-live-search="true"></select>
+  <button type="button col-2" class="plus-button" data-toggle="modal" data-target="#add-project-modal"></button>
+</div>
+
+<div class="modal fade" id="add-project-modal" tabindex="-1" role="dialog" aria-labelledby="add-project-modal-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="add-project-modal-label">Add Project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="alert {{ alert_type }}" role="alert" style="display: none;">
+          {% if message  %}
+              {{message}}
+          {% endif %}
+        </div>
+        <form method="POST">
+          <div class="form-group">
+            <label for="project-name" class="col-form-label">Project Name:</label>
+            <input type="text" class="form-control" id="project-name" pattern=".{0,50}" title="50文字以内で入力してください" placeholder="最大文字数 50 文字">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="send-project" type="button" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+

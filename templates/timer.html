@@ -1,0 +1,36 @@
+<form class="my-4">
+    <div class="form-group row">
+        <label for="appt-time" class="col-form-label col-2 col-form-label">Set Timer: </label>
+        <div class="col-5">
+          <input id="appt-time" name="appt-time" class="form-control" type="time" step="1">
+        </div>
+        <button type="button" class="btn btn-outline-secondary start mx-1">
+            <i class="bi bi-play-fill"></i> <!-- Start -->
+        </button>
+        <button type="button" class="btn btn-outline-secondary stop mx-1">
+            <i class="bi bi-pause-fill"></i> <!-- Stop -->
+        </button>
+        <button type="button" class="btn btn-outline-secondary reset mx-1">
+            <i class="bi bi-arrow-clockwise"></i> <!-- Reset -->
+        </button>
+    </div>
+
+    <!-- <label for="appt-time">Set Timer: </label>
+    <input id="appt-time" type="time" name="appt-time" step="1">
+    <button type="button" class="btn btn-outline-secondary start">
+        <i class="bi bi-play-fill"></i> Start
+    </button>
+    <button type="button" class="btn btn-outline-secondary stop">
+        <i class="bi bi-pause-fill"></i> Stop
+    </button>
+    <button type="button" class="btn btn-outline-secondary reset">
+        <i class="bi bi-arrow-clockwise"></i> Reset
+    </button> -->
+</form>
+<h2 id="result"></h2>
+ 
+<!-- 音声ファイルの読み込み 9〜10行目にURLを指定 -->
+<audio id="sound-file" preload="auto">
+	<source src="{{ url_for('static', filename='resources/warning1.mp3') }}" type="audio/mp3">
+</audio>
+<script src="{{ url_for('static', filename='js/timer.js') }}"></script>

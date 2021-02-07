@@ -1,0 +1,15 @@
+{% extends 'default.html' %}
+{% block head %}
+    <!-- <script src="{{ url_for('static', filename='js/project.js') }}"></script> -->
+{% endblock %}
+{% block content %}
+    <div class="container">
+        {% include "header.html" %}
+        <div class="row">
+            {% include "todo-list.html" %}
+            {% include "todo-detail.html" %}
+            <script src="{{ url_for('static', filename='js/project.js') }}"></script>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,26 @@
+<div class="col-md-8 center todo-detail">
+    <div class="alert {{ alert_type }} my-2" role="alert" style="display: none;">
+        {% if message  %}
+            {{message}}
+        {% endif %}
+    </div>
+    {% include "timer.html" %}
+    {% with parts = "todo-detail" %} 
+        {% include "status.html" %}
+        {% include "project.html" %}
+        {% include "deadline.html" %}
+        {% include "progress-rate.html" %}
+    {% endwith %}
+    <form method="POST" class="my-3">
+        <textarea id="mde" name="mde"></textarea>
+        <div class="text-right my-2">
+            <button type="button" class="btn btn-outline-secondary update">
+                <!-- <i class="bi bi-upload"></i> Update -->
+                Update
+            </button>
+        </div>
+    </form>
+    <div id="md"></div>
+</div>
+
+<script src="{{ url_for('static', filename='js/todo-detail.js') }}"></script>

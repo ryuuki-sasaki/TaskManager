@@ -1,0 +1,36 @@
+<div class="todo-list col-md-4">
+    
+    <div class="text-center my-4">
+        <h2 class="mb-4">Todo List</h2>
+        <!-- <form class="search">
+            <input type="text" class="form-control m-auto" name="search" placeholder="Search KeyWord">
+        </form> -->
+    </div>
+
+    <div class="alert {{ alert_type }}" role="alert" style="display: none;">
+        {% if message  %}
+            {{message}}
+        {% endif %}
+    </div>
+
+    {% with parts = "todo-list" %} 
+        {% include "status.html" %}
+        {% include "project.html" %}
+    {% endwith %}
+    <div class="text-right my-2">
+        <button type="button" class="btn btn-outline-secondary search">
+            <i class="bi bi-search"></i> Search
+        </button>
+    </div>
+
+    <ul class="list-group todos mx-auto text-light scroll" data-lastnum="2">
+        <!-- javaScript でリストを追加する予定-->
+    </ul>
+
+    <form class="add text-center">
+        <label class="text-light">ADDING TASK</label>
+        <input type="text" class="form-control m-auto" name="add" pattern=".{0,200}" title="200文字以内で入力してください" placeholder="最大文字数 200 文字">
+    </form>
+</div>
+<script src="{{ url_for('static', filename='js/todo-list.js') }}"></script>
+
