@@ -5,10 +5,13 @@
 
 
 * SSL暗号化しないと認証時パスワード盗聴されちゃう(パスワードを送信時に暗号化するなどして回避してもいいかも)
+(https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
 
 * subproject, 期限(期限はMDに書けばいいかも)
 
 * ロードマップ
+
+* 
 ---
 
 * プロジェクト分け　OK

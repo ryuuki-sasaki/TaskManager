@@ -36,7 +36,7 @@ services:
       MONGODB_DATA_DIR: /data/db
       MONDODB_LOG_DIR: /dev/null
     volumes:
-      - ./mongodbdata:/data/db
+      - mongodbdata:/data/db
     networks:
       - backend
 
@@ -55,7 +55,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/nginxdata:/var/log/nginx
+      - nginxdata:/var/log/nginx
     depends_on:
       - flask
     networks:
@@ -67,10 +67,12 @@ networks:
   backend:
     driver: bridge
 
-# volumes:
-#   mongodbdata:
-#     driver: local
-#   appdata:
-#     driver: local
-#   nginxdata:
-#     driver: local
+# flaskは更新をすぐDockerに反映したいからTaskManagerの
+# ルートディレクトリマウントを繋ぎこんでいる(本番環境向けだとあんま意味なさそうだけど一旦これで行く)
+volumes:
+  mongodbdata:
+    driver: local
+  # appdata:
+  #   driver: local
+  nginxdata:
+    driver: local
