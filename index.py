@@ -9,7 +9,7 @@ from flask_bcrypt import Bcrypt
 import html
 from cerberus import Validator
 
-app.secret_key = b'L+@6$+eQ&naTVfJ#7m*'
+app.secret_key = f'{os.environ.get("SECLET_KEY")}'.encode()
 bcrypt = Bcrypt(app)
 account_schema = {
   'email': {
