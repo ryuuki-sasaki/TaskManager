@@ -8,6 +8,7 @@ from functools import wraps
 from flask_bcrypt import Bcrypt
 import html
 from cerberus import Validator
+from http import HTTPStatus
 
 app.secret_key = f'{os.environ.get("SECLET_KEY")}'.encode()
 bcrypt = Bcrypt(app)
@@ -130,7 +131,7 @@ def create_account():
 
         pw_hash = bcrypt.generate_password_hash(data['password'])
         app.logger.info('password is %s', pw_hash)
-        status_code = 201
+        status_code = HTTPStatus.CREATED
         item = {
             'email': data['email'],
             'password': pw_hash
@@ -143,12 +144,12 @@ def create_account():
             app.logger.info(err)
             message = 'メールアドレスが既に登録済みです。'
             alert_type = 'alert-danger'
-            status_code = 409
+            status_code = HTTPStatus.CONFLICT
         except Exception as err:
             app.logger.info(err)
             message = 'アカウントの作成に失敗しました。'
             alert_type = 'alert-danger'
-            status_code = 500
+            status_code = HTTPStatus.INTERNAL_SERVER_ERROR
 
     return render_template('create-account.html', message=message, alert_type=alert_type), status_code
 
@@ -160,7 +161,7 @@ def tasks():
 @app.route('/todo')
 @login_required
 def get_todo():
-    status_code = 200
+    status_code = HTTPStatus.OK
     message = ''
     alert_type = ''
     data = []
@@ -187,7 +188,7 @@ def get_todo():
             app.logger.info(err)
             message = 'リストの取得に失敗しました。'
             alert_type = 'alert-danger'
-            status_code = 500
+            status_code = HTTPStatus.INTERNAL_SERVER_ERROR
 
     return jsonify(
         data=data,
@@ -201,14 +202,14 @@ def create_todo():
     data = request.form
     message=''
     alert_type=''
-    status_code = 201
+    status_code = HTTPStatus.CREATED
     item={}
     if (not data['task']):
         message='TODOを入力してください。'
     else:
         # result = validation_check(task_schema, 'name', data['task'])
         result = validation_check(task_schema, data)
-        if ('status_code' in result and result['status_code'] is 422):
+        if ('status_code' in result and result['status_code'] is HTTPStatus.UNPROCESSABLE_ENTITY):
             return jsonify(
                 message=result['message'],
                 alert_type=result['alert_type'],
@@ -237,7 +238,7 @@ def create_todo():
             app.logger.info(err)
             message = err
             alert_type = 'alert-danger'
-            status_code = 500
+            status_code = HTTPStatus.INTERNAL_SERVER_ERROR
 
     #TODO 失敗時の処理も入れる
     return jsonify(
@@ -249,7 +250,7 @@ def create_todo():
 @app.route('/todo/<todo_id>/detail')
 @login_required
 def get_todo_detail(todo_id):
-    status_code = 200
+    status_code = HTTPStatus.OK
     message = ''
     alert_type = ''
     item = {}
@@ -269,7 +270,7 @@ def get_todo_detail(todo_id):
             app.logger.info(err)
             message = '詳細の取得に失敗しました。'
             alert_type = 'alert-danger'
-            status_code = 500
+            status_code = HTTPStatus.INTERNAL_SERVER_ERROR
 
     return jsonify(
         data=item,
@@ -282,14 +283,14 @@ def get_todo_detail(todo_id):
 def update_todo_detail(todo_id):
     data = request.form
     message=''
-    status_code = 200
+    status_code = HTTPStatus.OK
     alert_type=''
     app.logger.info('request.form is %s',  request.form)
     app.logger.info('text is %s',  data['text'])
     try:
         # result = validation_check(task_detail_schema, 'name', data['name'])
         result = validation_check(task_detail_schema, data)
-        if ('status_code' in result and result['status_code'] is 422):
+        if ('status_code' in result and result['status_code'] is HTTPStatus.UNPROCESSABLE_ENTITY):
             return jsonify(
                 message=result['message'],
                 alert_type=result['alert_type'],
@@ -314,7 +315,7 @@ def update_todo_detail(todo_id):
         app.logger.info(err)
         message = err
         alert_type = 'alert-danger'
-        status_code=500
+        status_code=HTTPStatus.INTERNAL_SERVER_ERROR
     # app.logger.info('todo detail update result %s', result)
 
     return jsonify(
@@ -327,14 +328,14 @@ def update_todo_detail(todo_id):
 def create_project():
     data = request.form
     message=''
-    status_code = 201
+    status_code = HTTPStatus.CREATED
     alert_type=''
     item={}
     if (not data['name']):
         message='Project Nameを入力してください。'
     else:
         result = validation_check(project_schema, data)
-        if ('status_code' in result and result['status_code'] is 422):
+        if ('status_code' in result and result['status_code'] is HTTPStatus.UNPROCESSABLE_ENTITY):
             return jsonify(
                 message=result['message'],
                 alert_type=result['alert_type'],
@@ -364,7 +365,7 @@ def create_project():
 @app.route('/project')
 @login_required
 def get_project():
-    status_code = 200
+    status_code = HTTPStatus.OK
     message = ''
     alert_type = ''
     data = []
@@ -381,7 +382,7 @@ def get_project():
             app.logger.info(err)
             message = 'projectの取得に失敗しました。'
             alert_type = 'alert-danger'
-            status_code = 500
+            status_code = HTTPStatus.INTERNAL_SERVER_ERROR
 
     return jsonify(
         data=data,
@@ -398,7 +399,7 @@ def validation_check(schema, data):
     }
     if (v.validate(data) is False):
         app.logger.info(v.errors)
-        result['status_code'] = 422
+        result['status_code'] = HTTPStatus.UNPROCESSABLE_ENTITY
         result['message'] = v.errors
         result['alert_type'] = 'alert-danger'
 
