@@ -1,1 +1,0 @@
-let global_todo_id=''

@@ -13,7 +13,7 @@ const defaultCallback = () => {
             case 200:
                 $('.todo-list > .alert').hide();
                 tasks = res.data;
-                addTodoList(tasks);                
+                addTodoList(tasks);
                 break;
         
             default:
@@ -198,13 +198,15 @@ list.addEventListener('click', (e) => {
     if(e.target && e.target.nodeName == "LI") {
         let id = e.target.id;
         //TODO ここはgetTodoDetailの成否見てから実行したほうが良さそう
-        let prev = `li[id="${global_todo_id}"]`;
+        //selectedになっているリストのIDを取得
+        const prev_selected_id = $('.todos li.selected').attr('id');
+        let prev = `li[id="${prev_selected_id}"]`;
         let selected = `li[id="${id}"]`;
         console.log(prev);
         console.log(selected);
         $(prev).removeClass('selected');
         $(selected).addClass('selected');
-        getTodoDetail(id);
+        getTodoDetail(prev_selected_id, id);
     }
 });
 
