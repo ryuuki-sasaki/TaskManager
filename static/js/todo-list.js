@@ -199,14 +199,14 @@ list.addEventListener('click', (e) => {
         let id = e.target.id;
         //TODO ここはgetTodoDetailの成否見てから実行したほうが良さそう
         //selectedになっているリストのIDを取得
-        const prev_select_task_id = localStorage.getItem('selected_task_id');
-        let prev = `li[id="${prev_select_task_id}"]`;
+        const prev_selected_id = $('.todos li.selected').attr('id');
+        let prev = `li[id="${prev_selected_id}"]`;
         let selected = `li[id="${id}"]`;
         console.log(prev);
         console.log(selected);
         $(prev).removeClass('selected');
         $(selected).addClass('selected');
-        getTodoDetail(id);
+        getTodoDetail(prev_selected_id, id);
     }
 });
 

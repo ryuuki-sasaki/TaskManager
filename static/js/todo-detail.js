@@ -71,13 +71,13 @@ update.addEventListener('click', (e) => {
     // xhttp.onerror = function() {
     //   // do something
     // }
-    const selected_id = localStorage.getItem('selected_task_id');
+    const selected_id = $('.todos li.selected').attr('id');
     xhttp.open("POST", `/todo/${selected_id}/detail/update`, true);
     xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
     xhttp.send(`text=${text}&status=${status}&project_id=${project_id}&start_datetime=${start_datetime}&end_datetime=${end_datetime}&progress_rate=${progress_rate}`); 
 });
 
-const getTodoDetail = id => {
+const getTodoDetail = (prev_selected_id, id) => {
     // localStorageに値が存在すればそいつセットなければ今の値をlocalStorageにセット
     let text = localStorage.getItem(id + '_text');
     let status = localStorage.getItem(id + '_status');
@@ -91,13 +91,12 @@ const getTodoDetail = id => {
     let prev_start_datetime = $('input[id="start-datetime"]').val();
     let prev_end_datetime = $('input[id="end-datetime"]').val();
     let prev_progress_rate = $('.progress-rate select').val();
-    const prev_select_task_id = localStorage.getItem('selected_task_id');
-    localStorage.setItem(prev_select_task_id + '_text', simplemde.value());
-    localStorage.setItem(prev_select_task_id + '_status', prev_status);
-    localStorage.setItem(prev_select_task_id + '_project_id', prev_project_id);
-    localStorage.setItem(prev_select_task_id + '_start_datetime', prev_start_datetime);
-    localStorage.setItem(prev_select_task_id + '_end_datetime', prev_end_datetime);
-    localStorage.setItem(prev_select_task_id + '_progress_rate', prev_progress_rate);
+    localStorage.setItem(prev_selected_id + '_text', simplemde.value());
+    localStorage.setItem(prev_selected_id + '_status', prev_status);
+    localStorage.setItem(prev_selected_id + '_project_id', prev_project_id);
+    localStorage.setItem(prev_selected_id + '_start_datetime', prev_start_datetime);
+    localStorage.setItem(prev_selected_id + '_end_datetime', prev_end_datetime);
+    localStorage.setItem(prev_selected_id + '_progress_rate', prev_progress_rate);
     let alert = $('.todo-detail > .alert');
     alert.hide();
     if (text !== null || status !== null || project_id !== null || 
@@ -150,7 +149,7 @@ const getTodoDetail = id => {
         xhttp.open("GET", `/todo/${id}/detail`, true);
         xhttp.send();
     }
-    localStorage.setItem('selected_task_id', id);
+    // global_todo_id = id;
 }
 
 const clearTodoDetail = () => {
