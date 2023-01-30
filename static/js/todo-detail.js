@@ -28,6 +28,31 @@ let simplemde = new SimpleMDE({
 });
 const mdSwitch = document.getElementById('switch');
 
+let gTimer
+// 入力中、0.7秒間入力がなければ、入力内容をローカルストレージに保存
+simplemde.codemirror.on('inputRead', (e) => {
+    if(gTimer){clearTimeout(gTimer);}
+    console.log(gTimer);
+    gTimer = setTimeout(saveInputToLocalStorage, 700);
+})
+
+// 入力完了後入力内容をローカルストレージに保存
+const saveInputToLocalStorage = () => {
+    console.log("save local storage")
+    const selected_todo_id = $('.todos li.selected').attr('id');
+    const prev_status = $('div[id="todo-detail-status-select"] select').val();
+    const prev_project_id = $('div[id="todo-detail-project-select"] select').val();
+    const prev_start_datetime = $('input[id="start-datetime"]').val();
+    const prev_end_datetime = $('input[id="end-datetime"]').val();
+    const prev_progress_rate = $('.progress-rate select').val();
+    localStorage.setItem(selected_todo_id + '_text', simplemde.value());
+    localStorage.setItem(selected_todo_id + '_status', prev_status);
+    localStorage.setItem(selected_todo_id + '_project_id', prev_project_id);
+    localStorage.setItem(selected_todo_id + '_start_datetime', prev_start_datetime);
+    localStorage.setItem(selected_todo_id + '_end_datetime', prev_end_datetime);
+    localStorage.setItem(selected_todo_id + '_progress_rate', prev_progress_rate);
+}
+
 // TODO submitでうまくいかない理由(e.preventDefault();してるのに元画面にリダイレクトしてしまう)
 update.addEventListener('click', (e) => {
     // console.log("detail clicked");
@@ -77,7 +102,7 @@ update.addEventListener('click', (e) => {
     xhttp.send(`text=${text}&status=${status}&project_id=${project_id}&start_datetime=${start_datetime}&end_datetime=${end_datetime}&progress_rate=${progress_rate}`); 
 });
 
-const getTodoDetail = (prev_selected_id, id) => {
+const getTodoDetail = id => {
     // localStorageに値が存在すればそいつセットなければ今の値をlocalStorageにセット
     let text = localStorage.getItem(id + '_text');
     let status = localStorage.getItem(id + '_status');
@@ -85,18 +110,6 @@ const getTodoDetail = (prev_selected_id, id) => {
     let start_datetime = localStorage.getItem(id + '_start_datetime');
     let end_datetime = localStorage.getItem(id + '_end_datetime');
     let progress_rate = localStorage.getItem(id + '_progress_rate');
-
-    let prev_status = $('div[id="todo-detail-status-select"] select').val();
-    let prev_project_id = $('div[id="todo-detail-project-select"] select').val();
-    let prev_start_datetime = $('input[id="start-datetime"]').val();
-    let prev_end_datetime = $('input[id="end-datetime"]').val();
-    let prev_progress_rate = $('.progress-rate select').val();
-    localStorage.setItem(prev_selected_id + '_text', simplemde.value());
-    localStorage.setItem(prev_selected_id + '_status', prev_status);
-    localStorage.setItem(prev_selected_id + '_project_id', prev_project_id);
-    localStorage.setItem(prev_selected_id + '_start_datetime', prev_start_datetime);
-    localStorage.setItem(prev_selected_id + '_end_datetime', prev_end_datetime);
-    localStorage.setItem(prev_selected_id + '_progress_rate', prev_progress_rate);
     let alert = $('.todo-detail > .alert');
     alert.hide();
     if (text !== null || status !== null || project_id !== null || 

@@ -206,7 +206,7 @@ list.addEventListener('click', (e) => {
         console.log(selected);
         $(prev).removeClass('selected');
         $(selected).addClass('selected');
-        getTodoDetail(prev_selected_id, id);
+        getTodoDetail(id);
     }
 });
 
