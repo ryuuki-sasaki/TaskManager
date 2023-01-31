@@ -55,6 +55,10 @@ const saveInputToLocalStorage = () => {
 
 // TODO submitでうまくいかない理由(e.preventDefault();してるのに元画面にリダイレクトしてしまう)
 update.addEventListener('click', (e) => {
+    const selected_id = $('.todos li.selected').attr('id');
+    if (!selected_id) {
+        return alert("タスクを選択してください。");
+    }
     // console.log("detail clicked");
     // console.log(global_todo_id);
     // デフォルトのイベントを無効
@@ -96,7 +100,6 @@ update.addEventListener('click', (e) => {
     // xhttp.onerror = function() {
     //   // do something
     // }
-    const selected_id = $('.todos li.selected').attr('id');
     xhttp.open("POST", `/todo/${selected_id}/detail/update`, true);
     xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
     xhttp.send(`text=${text}&status=${status}&project_id=${project_id}&start_datetime=${start_datetime}&end_datetime=${end_datetime}&progress_rate=${progress_rate}`); 
