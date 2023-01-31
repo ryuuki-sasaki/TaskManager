@@ -14,6 +14,13 @@ const defaultCallback = () => {
                 $('.todo-list > .alert').hide();
                 tasks = res.data;
                 addTodoList(tasks);
+                const selected_task = $('.todos li.selected');
+                if (tasks.length > 0 && selected_task.length === 0) {
+                    const first_task = $('.todos li:first');
+                    const first_task_id = first_task.attr('id');
+                    first_task.addClass('selected');
+                    getTodoDetail(first_task_id);
+                } 
                 break;
         
             default:
@@ -39,15 +46,9 @@ const getTasks = (callback, status=0, project_id='') => {
     xhttp.send();   
 }
 
-(function(){
-    // TODO ここasync awaitで受け取った方がよきかも
-    // let callback = function() {
-    //     let tasks = JSON.parse(this.response);
-    //     tasks = tasks.data;
-    //     addTodoList(tasks);
-    // }
+window.onload = () => {
     getTasks(defaultCallback());
-})();
+}
 
 // const saveTaskToLocalStorage = (task, html) => {
 //     // null は、localStorage に保存しない
