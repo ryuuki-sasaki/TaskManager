@@ -236,7 +236,7 @@ def create_todo():
             alert_type = 'alert-success'
         except Exception as err:
             app.logger.info(err)
-            message = err
+            message = html.escape(err)
             alert_type = 'alert-danger'
             status_code = HTTPStatus.INTERNAL_SERVER_ERROR
 
@@ -295,6 +295,7 @@ def update_todo_detail(todo_id):
                 message=result['message'],
                 alert_type=result['alert_type'],
             ), result['status_code']
+
         result = db.todo.update_one(
                     {'_id': ObjectId(todo_id)},
                     {
@@ -313,7 +314,7 @@ def update_todo_detail(todo_id):
         alert_type='alert-success'
     except Exception as err:
         app.logger.info(err)
-        message = err
+        message = html.escape(err)
         alert_type = 'alert-danger'
         status_code=HTTPStatus.INTERNAL_SERVER_ERROR
     # app.logger.info('todo detail update result %s', result)
@@ -352,7 +353,7 @@ def create_project():
             }
         except Exception as err:
             app.logger.info(err)
-            message = err
+            message = html.escape(err)
             alert_type = 'alert-danger'
 
     return jsonify(
@@ -400,7 +401,7 @@ def validation_check(schema, data):
     if (v.validate(data) is False):
         app.logger.info(v.errors)
         result['status_code'] = HTTPStatus.UNPROCESSABLE_ENTITY
-        result['message'] = v.errors
+        result['message'] = html.escape(v.errors)
         result['alert_type'] = 'alert-danger'
 
     return result
