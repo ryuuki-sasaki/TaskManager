@@ -38,19 +38,25 @@ simplemde.codemirror.on('inputRead', (e) => {
 
 // 入力完了後入力内容をローカルストレージに保存
 const saveInputToLocalStorage = () => {
-    console.log("save local storage")
     const selected_todo_id = $('.todos li.selected').attr('id');
-    const prev_status = $('div[id="todo-detail-status-select"] select').val();
-    const prev_project_id = $('div[id="todo-detail-project-select"] select').val();
-    const prev_start_datetime = $('input[id="start-datetime"]').val();
-    const prev_end_datetime = $('input[id="end-datetime"]').val();
-    const prev_progress_rate = $('.progress-rate select').val();
-    localStorage.setItem(selected_todo_id + '_text', simplemde.value());
-    localStorage.setItem(selected_todo_id + '_status', prev_status);
-    localStorage.setItem(selected_todo_id + '_project_id', prev_project_id);
-    localStorage.setItem(selected_todo_id + '_start_datetime', prev_start_datetime);
-    localStorage.setItem(selected_todo_id + '_end_datetime', prev_end_datetime);
-    localStorage.setItem(selected_todo_id + '_progress_rate', prev_progress_rate);
+    const status = $('div[id="todo-detail-status-select"] select').val();
+    const project_id = $('div[id="todo-detail-project-select"] select').val();
+    const start_datetime = $('input[id="start-datetime"]').val();
+    const end_datetime = $('input[id="end-datetime"]').val();
+    const progress_rate = $('.progress-rate select').val();
+    const save_item = {
+        text: simplemde.value(),
+        status: status,
+        project_id: project_id,
+        start_datetime: start_datetime,
+        end_datetime: end_datetime,
+        progress_rate: progress_rate,
+    }
+    localStorage.setItem(selected_todo_id, JSON.stringify(save_item));
+}
+
+const clearLocalStorageItem = itemKey => {
+    localStorage.removeItem(itemKey);
 }
 
 // TODO submitでうまくいかない理由(e.preventDefault();してるのに元画面にリダイレクトしてしまう)
@@ -107,24 +113,19 @@ update.addEventListener('click', (e) => {
 
 const getTodoDetail = id => {
     // localStorageに値が存在すればそいつセットなければ今の値をlocalStorageにセット
-    let text = localStorage.getItem(id + '_text');
-    let status = localStorage.getItem(id + '_status');
-    let project_id = localStorage.getItem(id + '_project_id');
-    let start_datetime = localStorage.getItem(id + '_start_datetime');
-    let end_datetime = localStorage.getItem(id + '_end_datetime');
-    let progress_rate = localStorage.getItem(id + '_progress_rate');
-    let alert = $('.todo-detail > .alert');
+    const local_storage_saved_item = localStorage.getItem(id);
+    const alert = $('.todo-detail > .alert');
     alert.hide();
-    if (text !== null || status !== null || project_id !== null || 
-        start_datetime !== null || end_datetime !== null || progress_rate !== null) {
+    if (local_storage_saved_item) {
         // localにステータスとプロジェクトを保存してセット
-        $('div[id="todo-detail-status-select"] select').val(status);
-        $('div[id="todo-detail-project-select"] select').val(project_id);
-        $('input[id="start-datetime"]').val(start_datetime);
-        $('input[id="end-datetime"]').val(end_datetime);
-        $('.progress-rate select').val(progress_rate);
+        const local_storage_saved_item_obj = JSON.parse(local_storage_saved_item);
+        $('div[id="todo-detail-status-select"] select').val(local_storage_saved_item_obj.status);
+        $('div[id="todo-detail-project-select"] select').val(local_storage_saved_item_obj.project_id);
+        $('input[id="start-datetime"]').val(local_storage_saved_item_obj.start_datetime);
+        $('input[id="end-datetime"]').val(local_storage_saved_item_obj.end_datetime);
+        $('.progress-rate select').val(local_storage_saved_item_obj.progress_rate);
         $('.selectpicker').selectpicker('refresh');
-        simplemde.value(text);
+        simplemde.value(local_storage_saved_item_obj.text);
     } else {
         let xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
@@ -134,19 +135,13 @@ const getTodoDetail = id => {
             console.log(res)
             switch (xhttp.status) {
                 case 200:
-                    text = res['data']['detail'];
-                    status = res['data']['status'];
-                    project_id = res['data']['project_id'];
-                    start_datetime = res['data']['start_datetime'];
-                    end_datetime = res['data']['end_datetime'];
-                    progress_rate = res['data']['progress_rate'];
-                    $('div[id="todo-detail-status-select"] select').val(status);
-                    $('div[id="todo-detail-project-select"] select').val(project_id);
-                    $('input[id="start-datetime"]').val(start_datetime);
-                    $('input[id="end-datetime"]').val(end_datetime);
-                    $('.progress-rate select').val(progress_rate);
+                    $('div[id="todo-detail-status-select"] select').val(res['data']['status']);
+                    $('div[id="todo-detail-project-select"] select').val(res['data']['project_id']);
+                    $('input[id="start-datetime"]').val(res['data']['start_datetime']);
+                    $('input[id="end-datetime"]').val(res['data']['end_datetime']);
+                    $('.progress-rate select').val(res['data']['progress_rate']);
                     $('.selectpicker').selectpicker('refresh');
-                    simplemde.value(text);
+                    simplemde.value(res['data']['detail']);
                     break;
             
                 default:
