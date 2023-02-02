@@ -92,6 +92,7 @@ update.addEventListener('click', (e) => {
                 setTimeout(function() {
                     alert.hide('slow');
                 }, 5000);
+                clearLocalStorageItem(selected_id);
                 break;
             default:
                 for (const [key, value] of Object.entries(res.message)) {
