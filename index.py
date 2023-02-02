@@ -259,7 +259,7 @@ def get_todo_detail(todo_id):
 
         item = {
                 'id': str(todo['_id']),
-                'detail': html.escape(todo['detail']),
+                'detail': todo['detail'],
                 'status': todo['status'],
                 'start_datetime': todo['start_datetime'],
                 'end_datetime': todo['end_datetime'],
