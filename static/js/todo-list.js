@@ -162,7 +162,7 @@ addTask.addEventListener('submit', e => {
         // }
         xhttp.open("POST", '/todo/new', true);
         xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-        xhttp.send(`task=${task}`);       
+        xhttp.send(`task=${encodeURIComponent(task)}`);       
     }
 });
 

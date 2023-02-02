@@ -109,7 +109,7 @@ update.addEventListener('click', (e) => {
     // }
     xhttp.open("POST", `/todo/${selected_id}/detail/update`, true);
     xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-    xhttp.send(`text=${text}&status=${status}&project_id=${project_id}&start_datetime=${start_datetime}&end_datetime=${end_datetime}&progress_rate=${progress_rate}`); 
+    xhttp.send(`text=${encodeURIComponent(text)}&status=${status}&project_id=${project_id}&start_datetime=${start_datetime}&end_datetime=${end_datetime}&progress_rate=${progress_rate}`); 
 });
 
 const getTodoDetail = id => {
