@@ -181,7 +181,7 @@ def get_todo():
         for todo in _todos:
             item = {
                 'id': str(todo['_id']),
-                'todo': todo['todo'],
+                'todo': html.escape(todo['todo']),
             }
             data.append(item)
     except Exception as err:
@@ -217,7 +217,7 @@ def create_todo():
 
         try:
             item = {
-                'todo': html.escape(data['task']),
+                'todo': data['task'],
                 'detail': '',
                 'account_id': session['account_id'],
                 'status': 0,
@@ -230,7 +230,7 @@ def create_todo():
             res = db.todo.insert_one(item)
             data = {
                 'id': str(res.inserted_id),
-                'todo': item['todo'],
+                'todo': html.escape(item['todo']),
                 'detail': item['detail'],
             }
             alert_type = 'alert-success'
@@ -259,7 +259,7 @@ def get_todo_detail(todo_id):
 
         item = {
                 'id': str(todo['_id']),
-                'detail': todo['detail'],
+                'detail': html.escape(todo['detail']),
                 'status': todo['status'],
                 'start_datetime': todo['start_datetime'],
                 'end_datetime': todo['end_datetime'],
@@ -301,7 +301,7 @@ def update_todo_detail(todo_id):
                     {
                         '$set': 
                         {
-                            'detail': html.escape(data['text']),
+                            'detail': data['text'],
                             'status': int(data['status']),
                             'project_id': data['project_id'],
                             'start_datetime': data['start_datetime'],
@@ -343,13 +343,13 @@ def create_project():
             ), result['status_code']
         try:
             item = {
-                'name': html.escape(data['name']),
+                'name': data['name'],
                 'account_id': session['account_id'],
             }
             res = db.project.insert_one(item)
             data = {
                 'id': str(res.inserted_id),
-                'name': item['name'],
+                'name': html.escape(item['name']),
             }
         except Exception as err:
             app.logger.info(err)
@@ -376,7 +376,7 @@ def get_project():
         for project in _projects:
             item = {
                 'id': str(project['_id']),
-                'name': project['name'],
+                'name': html.escape(project['name']),
             }
             data.append(item)
     except Exception as err:
