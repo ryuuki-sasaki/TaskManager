@@ -59,14 +59,11 @@ const clearLocalStorageItem = itemKey => {
     localStorage.removeItem(itemKey);
 }
 
-// TODO submitでうまくいかない理由(e.preventDefault();してるのに元画面にリダイレクトしてしまう)
 update.addEventListener('click', (e) => {
     const selected_id = $('.todos li.selected').attr('id');
     if (!selected_id) {
         return alert("タスクを選択してください。");
     }
-    // console.log("detail clicked");
-    // console.log(global_todo_id);
     // デフォルトのイベントを無効
     e.preventDefault();
     let text = simplemde.value();
@@ -104,9 +101,6 @@ update.addEventListener('click', (e) => {
                 break;
         }
     }
-    // xhttp.onerror = function() {
-    //   // do something
-    // }
     xhttp.open("POST", `/todo/${selected_id}/detail/update`, true);
     xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
     xhttp.send(`text=${encodeURIComponent(text)}&status=${status}&project_id=${project_id}&start_datetime=${start_datetime}&end_datetime=${end_datetime}&progress_rate=${progress_rate}`); 
@@ -130,7 +124,6 @@ const getTodoDetail = id => {
     } else {
         let xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
-            // do something
             let res = JSON.parse(xhttp.response);
             console.log(xhttp.status)
             console.log(res)
@@ -159,13 +152,9 @@ const getTodoDetail = id => {
                     break;
             }
         }
-        // xhttp.onerror = function() {
-        //   // do something
-        // }
         xhttp.open("GET", `/todo/${id}/detail`, true);
         xhttp.send();
     }
-    // global_todo_id = id;
 }
 
 const clearTodoDetail = () => {

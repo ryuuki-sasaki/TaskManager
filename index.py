@@ -207,7 +207,6 @@ def create_todo():
     if (not data['task']):
         message='TODOを入力してください。'
     else:
-        # result = validation_check(task_schema, 'name', data['task'])
         result = validation_check(task_schema, data)
         if ('status_code' in result and result['status_code'] is HTTPStatus.UNPROCESSABLE_ENTITY):
             return jsonify(
@@ -288,7 +287,6 @@ def update_todo_detail(todo_id):
     app.logger.info('request.form is %s',  request.form)
     app.logger.info('text is %s',  data['text'])
     try:
-        # result = validation_check(task_detail_schema, 'name', data['name'])
         result = validation_check(task_detail_schema, data)
         if ('status_code' in result and result['status_code'] is HTTPStatus.UNPROCESSABLE_ENTITY):
             return jsonify(
@@ -317,7 +315,6 @@ def update_todo_detail(todo_id):
         message = html.escape(err)
         alert_type = 'alert-danger'
         status_code=HTTPStatus.INTERNAL_SERVER_ERROR
-    # app.logger.info('todo detail update result %s', result)
 
     return jsonify(
         message=message,

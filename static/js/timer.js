@@ -14,7 +14,6 @@ const initialize = () => {
     intervalId = null;
     isStop = false;
     apptTime.value = '';
-    // result.textContent = '時間を入力してStartを押すとタイマーが開始します。'
 }
 
 (function(){
@@ -25,7 +24,6 @@ const initialize = () => {
 const countdownTimer = () => {
     let addZero = function(n) { return ('0' + n).slice(-2); }
     if (+new Date(calc) <= INTERVAL) {
-        // result.textContent = '終了しました。'
         removeInterval();
         sound.play();
     } else {
