@@ -143,6 +143,10 @@ const getTodoDetail = id => {
                     $('.progress-rate select').val(res['data']['progress_rate']);
                     $('.selectpicker').selectpicker('refresh');
                     simplemde.value(res['data']['detail']);
+                    // プレビュー状態が有効なら無効にする
+                    if (simplemde.isPreviewActive()) {
+                        simplemde.togglePreview();
+                    }
                     break;
             
                 default:
@@ -167,9 +171,5 @@ const getTodoDetail = id => {
 const clearTodoDetail = () => {
     simplemde.value('');
 }
-
-(function(){
-    simplemde.togglePreview();
-})();
 
 
